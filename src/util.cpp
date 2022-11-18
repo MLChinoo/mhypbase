@@ -10,7 +10,42 @@ namespace util
         if (ini.GetBoolValue("Basic", "EnableConsole", false)) {
             InitConsole();
         }
-        ClientVersion = ini.GetValue("Basic", "ClientVersion", "Offset");
+        ClientVersion = ini.GetValue("Basic", "ClientVersion", nullptr);
+        if (ClientVersion == nullptr) {
+            char pathOut[MAX_PATH] = {};
+            GetModuleFileName(NULL, pathOut, MAX_PATH);
+            auto path = std::filesystem::path(pathOut).parent_path() / "pkg_version";
+            std::ifstream infile(path);
+            std::string line;
+            std::regex str_expr = std::regex("UserAssembly.dll.*\"([0-9a-f]{32})\"");
+            auto match = std::smatch();
+            while (std::getline(infile, line)) {
+                std::regex_search(line, match, str_expr);
+                if (match.size() == 2) {
+                    auto str_match = match[1].str();
+                    if (str_match == "a1db328df8d382d2c5cdb350947f53e1") {
+                        ClientVersion = "OSRELWin3.2.0";
+                    }
+                    else if (str_match == "7640df29c451b40215a1fc50993d87aa") {
+                        ClientVersion = "OSCBWin3.2.50";
+                    }
+                    else if (str_match == "3c2d5b43477a8e59d97eb39a73826a20") {
+                        ClientVersion = "OSCBWin3.2.51";
+                    }
+                    else if (str_match == "ec5b1355a9232d6de15655ea02626414") {
+                        ClientVersion = "OSCBWin3.2.52";
+                    }
+                    else if (str_match == "88995f3ae431a88dc7d0176addeba816") {
+                        ClientVersion = "OSCBWin3.2.53";
+                    }
+                    else {
+                        ClientVersion = "Offset";
+                    }
+                    std::cout << "[init] Version detected " << ClientVersion << std::endl;
+                    break;
+                }
+            }
+        }
         RSAPublicKey = ini.GetValue("Value", "RSAPublicKey", nullptr);
         RSAPrivateKey = ini.GetValue("Value", "RSAPrivateKey", nullptr);
     }

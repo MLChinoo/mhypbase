@@ -15,5 +15,9 @@
 
 #include <iostream>
 #include <filesystem>
+#include <regex>
+#include <fstream>
+#include <sstream>
+#include <string>
 
 #endif // PCH_H
