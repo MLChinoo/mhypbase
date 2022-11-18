@@ -5,8 +5,6 @@
 #include "il2cpp-appdata.h"
 #include "util.h"
 
-#define length(array) ((sizeof(array)) / (sizeof(array[0])))
-
 namespace hook {
 	VOID Install() {
 		HookManager::install(app::MiHoYo__SDK__SDKUtil_RSAEncrypt, hook::MiHoYo__SDK__SDKUtil_RSAEncrypt);
@@ -16,10 +14,10 @@ namespace hook {
 
 	LPVOID MiHoYo__SDK__SDKUtil_RSAEncrypt(LPVOID publicKey, LPVOID content) {
 		std::cout << "[hook] MiHoYo__SDK__SDKUtil_RSAEncrypt reached." << std::endl;
-		const char* rsaPublicKey = util::GetRSAPublicKey();
-		if (length(rsaPublicKey) != 0) {
+		const char* key = util::GetRSAPublicKey();
+		if (key != nullptr) {
 			std::cout << "[hook] MiHoYo__SDK__SDKUtil_RSAEncrypt use config.ini value." << std::endl;
-			publicKey = il2cpp_string_new(rsaPublicKey);
+			publicKey = il2cpp_string_new(key);
 		}
 		return CALL_ORIGIN(MiHoYo__SDK__SDKUtil_RSAEncrypt, publicKey, content);
 	}
@@ -27,7 +25,7 @@ namespace hook {
 	LPVOID MoleMole__RSAUtil_GetRSAPublicKey() {
 		std::cout << "[hook] MoleMole__RSAUtil_GetRSAPublicKey reached." << std::endl;
 		const char* key = util::GetRSAPublicKey();
-		if (length(key) == 0) {
+		if (key == nullptr) {
 			return CALL_ORIGIN(MoleMole__RSAUtil_GetRSAPublicKey);
 		}
 		std::cout << "[hook] MiHoYo__SDK__SDKUtil_RSAEncrypt use config.ini value." << std::endl;
@@ -38,7 +36,7 @@ namespace hook {
 	LPVOID MoleMole__RSAUtil_GetRSAPrivateKey() {
 		std::cout << "[hook] MoleMole__RSAUtil_GetRSAPrivateKey reached." << std::endl;
 		const char* key = util::GetRSAPrivateKey();
-		if (length(key) == 0) {
+		if (key == nullptr) {
 			return CALL_ORIGIN(MoleMole__RSAUtil_GetRSAPrivateKey);
 		}
 		std::cout << "[hook] MoleMole__RSAUtil_GetRSAPrivateKey use config.ini value." << std::endl;

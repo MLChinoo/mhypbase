@@ -11,8 +11,8 @@ namespace util
             InitConsole();
         }
         ClientVersion = ini.GetValue("Basic", "ClientVersion", "Offset");
-        RSAPublicKey = ini.GetValue("Hook", "RSAPublicKey", "");
-        RSAPrivateKey = ini.GetValue("Hook", "RSAPrivateKey", "");
+        RSAPublicKey = ini.GetValue("Value", "RSAPublicKey", nullptr);
+        RSAPrivateKey = ini.GetValue("Value", "RSAPrivateKey", nullptr);
     }
 
     const char* GetRSAPublicKey() 
