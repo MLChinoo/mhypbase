@@ -6,7 +6,7 @@ namespace util
     VOID LoadConfig()
     {
         ini.SetUnicode();
-        ini.LoadFile("config.ini");
+        ini.LoadFile("mhypbase.ini");
         if (ini.GetBoolValue("Basic", "EnableConsole", false)) {
             InitConsole();
         }
@@ -72,7 +72,7 @@ namespace util
 
     VOID SaveConfig()
     {
-        ini.SaveFile("config.ini");
+        ini.SaveFile("mhypbase.ini");
     }
 
     VOID InitConsole()

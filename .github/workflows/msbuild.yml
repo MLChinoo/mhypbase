@@ -44,5 +44,5 @@ jobs:
         name: Artifacts
         path: |
           *.dll
-          config.ini
+          mhypbase.ini
           README.md
