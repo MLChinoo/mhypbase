@@ -10,7 +10,7 @@ namespace util
         if (ini.GetBoolValue("Basic", "EnableConsole", false)) {
             InitConsole();
         }
-        ClientVersion = ini.GetValue("Basic", "ClientVersion", nullptr);
+        ClientVersion = ini.GetValue("Offset", "ClientVersion", nullptr);
         if (ClientVersion == nullptr) {
             char pathOut[MAX_PATH] = {};
             GetModuleFileName(NULL, pathOut, MAX_PATH);
