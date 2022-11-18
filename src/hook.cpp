@@ -16,7 +16,7 @@ namespace hook {
 		std::cout << "[hook] MiHoYo__SDK__SDKUtil_RSAEncrypt reached." << std::endl;
 		const char* key = util::GetRSAPublicKey();
 		if (key != nullptr) {
-			std::cout << "[hook] MiHoYo__SDK__SDKUtil_RSAEncrypt use config.ini value." << std::endl;
+			std::cout << "[hook] MiHoYo__SDK__SDKUtil_RSAEncrypt using the configured value." << std::endl;
 			publicKey = il2cpp_string_new(key);
 		}
 		return CALL_ORIGIN(MiHoYo__SDK__SDKUtil_RSAEncrypt, publicKey, content);
@@ -28,7 +28,7 @@ namespace hook {
 		if (key == nullptr) {
 			return CALL_ORIGIN(MoleMole__RSAUtil_GetRSAPublicKey);
 		}
-		std::cout << "[hook] MoleMole__RSAUtil_GetRSAPublicKey use config.ini value." << std::endl;
+		std::cout << "[hook] MoleMole__RSAUtil_GetRSAPublicKey using the configured value." << std::endl;
 		auto encoding = app::System__Text__EncodingHelper_GetDefaultEncoding();
 		return app::System__Text__Encoding_GetBytes(encoding, il2cpp_string_new(key));
 	}
@@ -39,7 +39,7 @@ namespace hook {
 		if (key == nullptr) {
 			return CALL_ORIGIN(MoleMole__RSAUtil_GetRSAPrivateKey);
 		}
-		std::cout << "[hook] MoleMole__RSAUtil_GetRSAPrivateKey use config.ini value." << std::endl;
+		std::cout << "[hook] MoleMole__RSAUtil_GetRSAPrivateKey using the configured value." << std::endl;
 		auto encoding = app::System__Text__EncodingHelper_GetDefaultEncoding();
 		return app::System__Text__Encoding_GetBytes(encoding, il2cpp_string_new(key));
 	}
