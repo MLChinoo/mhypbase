@@ -22,5 +22,6 @@ VOID InitDllMain(HMODULE *hModule)
 	std::cout << "[init] Il2Cpp initialized." << std::endl;
 	hook::Install();
 	std::cout << "[init] Hook initialized." << std::endl;
-	util::SaveConfig();
+	// save config will mess up the comments in config file
+	// util::SaveConfig();
 }
