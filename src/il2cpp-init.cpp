@@ -22,12 +22,12 @@ VOID InitIl2Cpp()
     uintptr_t baseAddress = (UINT64)GetModuleHandleA("UserAssembly.dll");
 
     // Define IL2CPP API function addresses
-    #define DO_API(a, r, n, p) n = (r(*) p)(baseAddress + util::GetLongValue("Offset", #n, a))
+    #define DO_API(a, r, n, p) n = (r(*) p)(baseAddress + util::GetOffsetValue(#n, a))
     #include "il2cpp-api-functions.h"
     #undef DO_API
 
     // Define function addresses
-    #define DO_APP_FUNC(a, r, n, p) n = (r(*) p)(baseAddress + util::GetLongValue("Offset", #n, a))
+    #define DO_APP_FUNC(a, r, n, p) n = (r(*) p)(baseAddress + util::GetOffsetValue(#n, a))
     #include "il2cpp-functions.h"
     #undef DO_APP_FUNC
 }

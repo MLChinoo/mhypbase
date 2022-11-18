@@ -10,6 +10,7 @@ namespace util
         if (ini.GetBoolValue("Basic", "EnableConsole", false)) {
             InitConsole();
         }
+        ClientVersion = ini.GetValue("Basic", "ClientVersion", "Offset");
         RSAPublicKey = ini.GetValue("Hook", "RSAPublicKey", "");
         RSAPrivateKey = ini.GetValue("Hook", "RSAPrivateKey", "");
     }
@@ -29,9 +30,9 @@ namespace util
         return ini.GetBoolValue(a_pSection, a_pKey, a_nDefault);
     }
 
-    long GetLongValue(const char* a_pSection, const char* a_pKey, long a_nDefault)
+    long GetOffsetValue(const char* a_pKey, long a_nDefault)
     {
-        return ini.GetLongValue(a_pSection, a_pKey, a_nDefault);
+        return ini.GetLongValue(ClientVersion, a_pKey, a_nDefault);
     }
 
     VOID SaveConfig()
