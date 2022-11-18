@@ -28,7 +28,7 @@ namespace hook {
 		if (key == nullptr) {
 			return CALL_ORIGIN(MoleMole__RSAUtil_GetRSAPublicKey);
 		}
-		std::cout << "[hook] MiHoYo__SDK__SDKUtil_RSAEncrypt use config.ini value." << std::endl;
+		std::cout << "[hook] MoleMole__RSAUtil_GetRSAPublicKey use config.ini value." << std::endl;
 		auto encoding = app::System__Text__EncodingHelper_GetDefaultEncoding();
 		return app::System__Text__Encoding_GetBytes(encoding, il2cpp_string_new(key));
 	}
