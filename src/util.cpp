@@ -23,7 +23,7 @@ namespace util
                 std::regex_search(line, match, str_expr);
                 if (match.size() == 2) {
                     auto str_match = match[1].str();
-                    ClientVersion = ini.GetValue("MD5ClientVersion", str_match, nullptr);
+                    ClientVersion = ini.GetValue("MD5ClientVersion", str_match.c_str(), nullptr);
                     if (ClientVersion == nullptr) {
                         ClientVersion = "Offset";
                     }
