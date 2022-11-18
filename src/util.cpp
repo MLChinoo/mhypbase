@@ -26,6 +26,9 @@ namespace util
                     if (str_match == "a1db328df8d382d2c5cdb350947f53e1") {
                         ClientVersion = "OSRELWin3.2.0";
                     }
+                    else if (str_match == "639903877207463f8c6b08a73235c14e") {
+                        ClientVersion = "CNRELWin3.2.0";
+                    }
                     else if (str_match == "7640df29c451b40215a1fc50993d87aa") {
                         ClientVersion = "OSCBWin3.2.50";
                     }
