@@ -12,6 +12,7 @@ namespace util {
 	static const char* PrivateRSAKey;
 	const char* GetPublicRSAKey();
 	const char* GetPrivateRSAKey();
+	bool GetEnableValue(const char* a_pKey, bool a_pDefault);
 	long GetOffsetValue(const char* a_pKey, long a_pDefault);
 	VOID SaveConfig();
 	VOID InitConsole();

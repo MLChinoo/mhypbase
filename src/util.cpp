@@ -7,7 +7,7 @@ namespace util
     {
         ini.SetUnicode();
         ini.LoadFile("mhypbase.ini");
-        if (ini.GetBoolValue("Basic", "EnableConsole", false)) {
+        if (GetEnableValue("EnableConsole", false)) {
             InitConsole();
         }
         ClientVersion = ini.GetValue("Offset", "ClientVersion", nullptr);
@@ -46,9 +46,9 @@ namespace util
         return PrivateRSAKey;
     }
 
-    bool GetBoolValue(const char* a_pSection, const char* a_pKey, bool a_nDefault)
+    bool GetEnableValue(const char* a_pKey, bool a_nDefault)
     {
-        return ini.GetBoolValue(a_pSection, a_pKey, a_nDefault);
+        return ini.GetBoolValue("Basic", a_pKey, a_nDefault);
     }
 
     long GetOffsetValue(const char* a_pKey, long a_nDefault)

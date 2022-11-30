@@ -5,11 +5,18 @@
 #include "il2cpp-appdata.h"
 #include "util.h"
 
+const char* WarnLuaScript = "[warn] Server is trying to execute a Lua script remotely, which is potentially dangerous if not from a trusted source.";
+
 namespace hook {
 	VOID Install() {
 		HookManager::install(app::MiHoYo__SDK__SDKUtil_RSAEncrypt, hook::MiHoYo__SDK__SDKUtil_RSAEncrypt);
 		HookManager::install(app::MoleMole__MoleMoleSecurity_GetPublicRSAKey, hook::MoleMole__MoleMoleSecurity_GetPublicRSAKey);
 		HookManager::install(app::MoleMole__MoleMoleSecurity_GetPrivateRSAKey, hook::MoleMole__MoleMoleSecurity_GetPrivateRSAKey);
+		if (util::GetEnableValue("DropRCEPacket", false)) {
+			HookManager::install(app::MoleMole__FightModule_OnWindSeedClientNotify, hook::MoleMole__FightModule_OnWindSeedClientNotify);
+			HookManager::install(app::MoleMole__PlayerModule_OnWindSeedClientNotify, hook::MoleMole__PlayerModule_OnWindSeedClientNotify);
+			HookManager::install(app::MoleMole__PlayerModule_OnReciveLuaShell, hook::MoleMole__PlayerModule_OnReciveLuaShell);
+		}
 	}
 
 	LPVOID MiHoYo__SDK__SDKUtil_RSAEncrypt(LPVOID publicKey, LPVOID content) {
@@ -42,5 +49,23 @@ namespace hook {
 		std::cout << "[hook] MoleMole__MoleMoleSecurity_GetPrivateRSAKey using the configured value." << std::endl;
 		auto encoding = app::System__Text__EncodingHelper_GetDefaultEncoding();
 		return app::System__Text__Encoding_GetBytes(encoding, il2cpp_string_new(key));
+	}
+
+	LPVOID MoleMole__FightModule_OnWindSeedClientNotify(LPVOID __this, LPVOID notify) {
+		std::cout << "[hook] MoleMole__FightModule_OnWindSeedClientNotify blocked." << std::endl;
+		std::cout << WarnLuaScript << std::endl;
+		return nullptr;
+	}
+
+	LPVOID MoleMole__PlayerModule_OnWindSeedClientNotify(LPVOID __this, LPVOID notify) {
+		std::cout << "[hook] MoleMole__PlayerModule_OnWindSeedClientNotify blocked." << std::endl;
+		std::cout << WarnLuaScript << std::endl;
+		return nullptr;
+	}
+
+	LPVOID MoleMole__PlayerModule_OnReciveLuaShell(LPVOID __this, LPVOID notify) {
+		std::cout << "[hook] MoleMole__PlayerModule_OnReciveLuaShell blocked." << std::endl;
+		std::cout << WarnLuaScript << std::endl;
+		return nullptr;
 	}
 }

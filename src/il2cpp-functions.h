@@ -14,3 +14,12 @@ DO_APP_FUNC(0, LPVOID, MoleMole__MoleMoleSecurity_GetPublicRSAKey, ());
 
 // 3C 52 53 41 4B 65 79 56
 DO_APP_FUNC(0, LPVOID, MoleMole__MoleMoleSecurity_GetPrivateRSAKey, ());
+
+// ?? ?? ?? ?? ?? ?? ?? ??
+DO_APP_FUNC(0, LPVOID, MoleMole__FightModule_OnWindSeedClientNotify, (LPVOID __this, LPVOID notify));
+
+// ?? ?? ?? ?? ?? ?? ?? ??
+DO_APP_FUNC(0, LPVOID, MoleMole__PlayerModule_OnWindSeedClientNotify, (LPVOID __this, LPVOID notify));
+
+// ?? ?? ?? ?? ?? ?? ?? ??
+DO_APP_FUNC(0, LPVOID, MoleMole__PlayerModule_OnReciveLuaShell, (LPVOID __this, LPVOID notify));
