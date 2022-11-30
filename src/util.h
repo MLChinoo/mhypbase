@@ -8,8 +8,10 @@ static CSimpleIni ini;
 namespace util {
 	VOID LoadConfig();
 	static const char* ClientVersion;
+	static const char* ConfigChannel;
 	static const char* PublicRSAKey;
 	static const char* PrivateRSAKey;
+	const char* GetConfigChannel();
 	const char* GetPublicRSAKey();
 	const char* GetPrivateRSAKey();
 	bool GetEnableValue(const char* a_pKey, bool a_pDefault);

@@ -12,6 +12,8 @@ namespace hook {
 		HookManager::install(app::MiHoYo__SDK__SDKUtil_RSAEncrypt, hook::MiHoYo__SDK__SDKUtil_RSAEncrypt);
 		HookManager::install(app::MoleMole__MoleMoleSecurity_GetPublicRSAKey, hook::MoleMole__MoleMoleSecurity_GetPublicRSAKey);
 		HookManager::install(app::MoleMole__MoleMoleSecurity_GetPrivateRSAKey, hook::MoleMole__MoleMoleSecurity_GetPrivateRSAKey);
+		HookManager::install(app::MoleMole__ConfigUtil_LoadJSONStrConfig, hook::MoleMole__ConfigUtil_LoadJSONStrConfig);
+		HookManager::install(app::MoleMole__Miscs_GetConfigChannel, hook::MoleMole__Miscs_GetConfigChannel);
 		if (util::GetEnableValue("DropRCEPacket", false)) {
 			HookManager::install(app::MoleMole__FightModule_OnWindSeedClientNotify, hook::MoleMole__FightModule_OnWindSeedClientNotify);
 			HookManager::install(app::MoleMole__PlayerModule_OnWindSeedClientNotify, hook::MoleMole__PlayerModule_OnWindSeedClientNotify);
@@ -49,6 +51,22 @@ namespace hook {
 		std::cout << "[hook] MoleMole__MoleMoleSecurity_GetPrivateRSAKey using the configured value." << std::endl;
 		auto encoding = app::System__Text__EncodingHelper_GetDefaultEncoding();
 		return app::System__Text__Encoding_GetBytes(encoding, il2cpp_string_new(key));
+	}
+
+	LPVOID MoleMole__ConfigUtil_LoadJSONStrConfig(LPVOID jsonText, LPVOID useJsonUtility, LPVOID method)
+	{
+		std::cout << "[hook] MoleMole__ConfigUtil_LoadJSONStrConfig reached." << std::endl;
+		const char* config = util::GetConfigChannel();
+		if (config != nullptr) {
+			std::cout << "[hook] MoleMole__ConfigUtil_LoadJSONStrConfig using the configured value." << std::endl;
+			jsonText = il2cpp_string_new(config);
+		}
+		return CALL_ORIGIN(MoleMole__ConfigUtil_LoadJSONStrConfig, jsonText, useJsonUtility, method);
+	}
+
+	LPVOID MoleMole__Miscs_GetConfigChannel() {
+		std::cout << "[hook] MoleMole__Miscs_GetConfigChannel reached." << std::endl;
+		return app::MoleMole__Miscs_LoadConfigChannelBlk();
 	}
 
 	LPVOID MoleMole__FightModule_OnWindSeedClientNotify(LPVOID __this, LPVOID notify) {

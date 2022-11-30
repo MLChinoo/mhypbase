@@ -32,11 +32,17 @@ namespace util
                 }
             }
         }
+        ConfigChannel = ini.GetValue("Value", "ConfigChannel", nullptr);
         PublicRSAKey = ini.GetValue("Value", "PublicRSAKey", nullptr);
         PrivateRSAKey = ini.GetValue("Value", "PrivateRSAKey", nullptr);
     }
 
-    const char* GetPublicRSAKey() 
+    const char* GetConfigChannel()
+    {
+        return ConfigChannel;
+    }
+
+    const char* GetPublicRSAKey()
     {
         return PublicRSAKey;
     }
