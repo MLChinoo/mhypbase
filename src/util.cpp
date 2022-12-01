@@ -3,10 +3,24 @@
 
 namespace util
 {
+    HMODULE GetSelfModuleHandle()
+    {
+        MEMORY_BASIC_INFORMATION mbi;
+        return ((::VirtualQuery(GetSelfModuleHandle, &mbi, sizeof(mbi)) != 0) ? (HMODULE)mbi.AllocationBase : NULL);
+    }
+
+	const char* GetConfigPath()
+    {
+        char pathOut[MAX_PATH] = {};
+        GetModuleFileName(GetSelfModuleHandle(), pathOut, MAX_PATH);
+        auto path = std::filesystem::path(pathOut).parent_path() / "mhypbase.ini";
+        return path.string().c_str();
+    }
+
     VOID LoadConfig()
     {
         ini.SetUnicode();
-        ini.LoadFile("mhypbase.ini");
+        ini.LoadFile(GetConfigPath());
         if (GetEnableValue("EnableConsole", false)) {
             InitConsole();
         }
@@ -64,7 +78,7 @@ namespace util
 
     VOID SaveConfig()
     {
-        ini.SaveFile("mhypbase.ini");
+        ini.SaveFile(GetConfigPath());
     }
 
     VOID InitConsole()
