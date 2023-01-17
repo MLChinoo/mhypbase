@@ -12,8 +12,11 @@ namespace hook {
 		HookManager::install(app::MiHoYo__SDK__SDKUtil_RSAEncrypt, hook::MiHoYo__SDK__SDKUtil_RSAEncrypt);
 		HookManager::install(app::MoleMole__MoleMoleSecurity_GetPublicRSAKey, hook::MoleMole__MoleMoleSecurity_GetPublicRSAKey);
 		HookManager::install(app::MoleMole__MoleMoleSecurity_GetPrivateRSAKey, hook::MoleMole__MoleMoleSecurity_GetPrivateRSAKey);
-		HookManager::install(app::MoleMole__ConfigUtil_LoadJSONStrConfig, hook::MoleMole__ConfigUtil_LoadJSONStrConfig);
-		HookManager::install(app::MoleMole__Miscs_GetConfigChannel, hook::MoleMole__Miscs_GetConfigChannel);
+		if (util::GetConfigChannel() != nullptr) {
+			HookManager::install(app::UnityEngine__JsonUtility_FromJson, hook::UnityEngine__JsonUtility_FromJson);
+			HookManager::install(app::MoleMole__ConfigUtil_LoadJSONStrConfig, hook::MoleMole__ConfigUtil_LoadJSONStrConfig);
+			HookManager::install(app::MoleMole__Miscs_GetConfigChannel, hook::MoleMole__Miscs_GetConfigChannel);
+		}
 		if (util::GetEnableValue("DropRCEPacket", false)) {
 			HookManager::install(app::MoleMole__FightModule_OnWindSeedClientNotify, hook::MoleMole__FightModule_OnWindSeedClientNotify);
 			HookManager::install(app::MoleMole__PlayerModule_OnWindSeedClientNotify, hook::MoleMole__PlayerModule_OnWindSeedClientNotify);
@@ -53,6 +56,17 @@ namespace hook {
 		return app::System__Text__Encoding_GetBytes(encoding, il2cpp_string_new(key));
 	}
 
+	LPVOID UnityEngine__JsonUtility_FromJson(LPVOID json, LPVOID type, LPVOID method)
+	{
+		std::cout << "[hook] UnityEngine__JsonUtility_FromJson reached." << std::endl;
+		const char* config = util::GetConfigChannel();
+		if (config != nullptr) {
+			std::cout << "[hook] UnityEngine__JsonUtility_FromJson using the configured value." << std::endl;
+			json = il2cpp_string_new(config);
+		}
+		return CALL_ORIGIN(UnityEngine__JsonUtility_FromJson, json, type, method);
+	}
+
 	LPVOID MoleMole__ConfigUtil_LoadJSONStrConfig(LPVOID jsonText, LPVOID useJsonUtility, LPVOID method)
 	{
 		std::cout << "[hook] MoleMole__ConfigUtil_LoadJSONStrConfig reached." << std::endl;
@@ -66,7 +80,7 @@ namespace hook {
 
 	LPVOID MoleMole__Miscs_GetConfigChannel() {
 		std::cout << "[hook] MoleMole__Miscs_GetConfigChannel reached." << std::endl;
-		return app::MoleMole__Miscs_LoadConfigChannelBlk();
+		return app::MoleMole__Miscs_LoadChannelConfigBlk();
 	}
 
 	LPVOID MoleMole__FightModule_OnWindSeedClientNotify(LPVOID __this, LPVOID notify) {
