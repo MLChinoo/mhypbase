@@ -9,7 +9,7 @@ namespace util
         return ((::VirtualQuery(GetSelfModuleHandle, &mbi, sizeof(mbi)) != 0) ? (HMODULE)mbi.AllocationBase : NULL);
     }
 
-	const char* GetConfigPath()
+    const char* GetConfigPath()
     {
         char pathOut[MAX_PATH] = {};
         GetModuleFileName(GetSelfModuleHandle(), pathOut, MAX_PATH);
@@ -95,15 +95,13 @@ namespace util
     VOID DisableLogReport()
     {
         char pathOut[MAX_PATH] = {};
-        GetModuleFileName(NULL, pathOut, MAX_PATH);
-        auto pathOS = std::filesystem::path(pathOut).parent_path() / "GenshinImpact_Data" / "Plugins";
-        auto pathCN = std::filesystem::path(pathOut).parent_path() / "YuanShen_Data" / "Plugins";
-        std::error_code ec; // always ignore error code
-        std::filesystem::rename(pathOS / "Astrolabe.dll", pathOS / "Astrolabe.dll.bak", ec);
-        std::filesystem::rename(pathOS / "MiHoYoMTRSDK.dll", pathOS / "MiHoYoMTRSDK.dll.bak", ec);
-        std::filesystem::rename(pathCN / "Astrolabe.dll", pathCN / "Astrolabe.dll.bak", ec);
-        std::filesystem::rename(pathCN / "MiHoYoMTRSDK.dll", pathCN / "MiHoYoMTRSDK.dll.bak", ec);
-        // how to restore them??? hope nobody use it in prod.... XD
+        GetModuleFileName(nullptr, pathOut, MAX_PATH);
+
+        auto pathExe = std::filesystem::path(pathOut);
+        auto pathPlugin = pathExe.parent_path() / (pathExe.stem().wstring() + L"_Data") / "Plugins";
+
+        CreateFileW((pathPlugin / "Astrolabe.dll").c_str(), GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
+        CreateFileW((pathPlugin / "MiHoYoMTRSDK.dll").c_str(), GENERIC_READ, 0, nullptr, OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, nullptr);
     }
 
     // https://github.com/yubie-re/vmp-virtualprotect-bypass/blob/main/src/vp-patch.hpp
