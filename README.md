@@ -15,3 +15,15 @@ The latest GitHub Action build artifact: [[file]](https://nightly.link/Jx2f/mhyp
 - [x] _Verify the signature of the dispatched data_ with the public key to avoid the client error 4214.
 - [x] _Filter out the RCE packets_ to prevent the client from being fully controlled by the server.
 - [ ] ......
+
+## FAQ
+
+> You can ask for help in [GitHub Discussions](https://github.com/Jx2f/mhypbase/discussions).
+
+**Q: When do I use this project instead of `RSAPatch` or `Akebi-GC (RSAPatch)`?**
+
+**A**: This project is an alternative to `RSAPatch` and `Akebi-GC (RSAPatch)`. If you already using `Akebi-GC` in private servers, it's recommended to enable the `RSAPatch` feature in `Akebi-GC` instead of using this project. If you just want to replace the dispatch RSA keys and keep updating with the latest client, it's recommended to use `RSAPatch` since it's more lightweight and easier to adapt to the latest client.
+
+**Q: Why are those offsets hardcoded?**
+
+**A**: I'm too lazy to write pattern scanning code, and some offsets are not easy to find by pattern scanning.
