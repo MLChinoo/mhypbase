@@ -47,6 +47,7 @@ namespace util
             }
         }
         ConfigChannel = ini.GetValue("Value", "ConfigChannel", nullptr);
+        MiHoYoSDKRes = ini.GetValue("Value", "MiHoYoSDKRes", nullptr);
         PublicRSAKey = ini.GetValue("Value", "PublicRSAKey", nullptr);
         PrivateRSAKey = ini.GetValue("Value", "PrivateRSAKey", nullptr);
     }
@@ -54,6 +55,11 @@ namespace util
     const char* GetConfigChannel()
     {
         return ConfigChannel;
+    }
+
+    const char* GetMiHoYoSDKRes()
+    {
+        return MiHoYoSDKRes;
     }
 
     const char* GetPublicRSAKey()
@@ -146,5 +152,18 @@ namespace util
                     printf("%c", isprint(buf[i + j]) ? buf[i + j] : '.');
             printf("\n");
         }
+    }
+
+    std::string ConvertToString(VOID* ptr)
+    {
+        auto bytePtr = reinterpret_cast<unsigned char*>(ptr);
+        auto lengthPtr = reinterpret_cast<unsigned int*>(bytePtr + 0x10);
+        auto charPtr = reinterpret_cast<char16_t*>(bytePtr + 0x14);
+        auto size = lengthPtr[0];
+        std::u16string u16;
+        u16.resize(size);
+        memcpy((char*)&u16[0], (char*)charPtr, size * sizeof(char16_t));
+        std::wstring_convert<std::codecvt_utf8<char16_t>, char16_t> converter;
+        return converter.to_bytes(u16);
     }
 }

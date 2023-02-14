@@ -59,10 +59,21 @@ namespace hook {
 	LPVOID UnityEngine__JsonUtility_FromJson(LPVOID json, LPVOID type, LPVOID method)
 	{
 		std::cout << "[hook] UnityEngine__JsonUtility_FromJson reached." << std::endl;
-		const char* config = util::GetConfigChannel();
-		if (config != nullptr) {
-			std::cout << "[hook] UnityEngine__JsonUtility_FromJson using the configured value." << std::endl;
-			json = il2cpp_string_new(config);
+		auto jsonStr = util::ConvertToString(json);
+		if (jsonStr.find("DispatchConfigs") != std::string::npos) {
+			const char* config = util::GetConfigChannel();
+			if (config != nullptr) {
+				std::cout << "[hook] UnityEngine__JsonUtility_FromJson {StreamingAssets\\20527480.blk} using the configured value." << std::endl;
+				json = il2cpp_string_new(config);
+			}
+		}
+		else if (jsonStr.find("activity_domain") != std::string::npos) {
+			const char* config = util::GetMiHoYoSDKRes();
+			if (config != nullptr) {
+				std::cout << "[hook] MoleMole__ConfigUtil_LoadJSONStrConfig {StreamingAssets\\MiHoYoSDKRes\\PC\\mihoyo_sdk_res} using the configured value." << std::endl;
+				std::cout << jsonStr << std::endl;
+				json = il2cpp_string_new(config);
+			}
 		}
 		return CALL_ORIGIN(UnityEngine__JsonUtility_FromJson, json, type, method);
 	}
@@ -70,10 +81,21 @@ namespace hook {
 	LPVOID MoleMole__ConfigUtil_LoadJSONStrConfig(LPVOID jsonText, LPVOID useJsonUtility, LPVOID method)
 	{
 		std::cout << "[hook] MoleMole__ConfigUtil_LoadJSONStrConfig reached." << std::endl;
-		const char* config = util::GetConfigChannel();
-		if (config != nullptr) {
-			std::cout << "[hook] MoleMole__ConfigUtil_LoadJSONStrConfig using the configured value." << std::endl;
-			jsonText = il2cpp_string_new(config);
+		auto jsonStr = util::ConvertToString(jsonText);
+		if (jsonStr.find("DispatchConfigs") != std::string::npos) {
+			const char* config = util::GetConfigChannel();
+			if (config != nullptr) {
+				std::cout << "[hook] MoleMole__ConfigUtil_LoadJSONStrConfig {StreamingAssets\\20527480.blk} using the configured value." << std::endl;
+				jsonText = il2cpp_string_new(config);
+			}
+		}
+		else if (jsonStr.find("activity_domain") != std::string::npos) {
+			const char* config = util::GetMiHoYoSDKRes();
+			if (config != nullptr) {
+				std::cout << "[hook] MoleMole__ConfigUtil_LoadJSONStrConfig {StreamingAssets\\MiHoYoSDKRes\\PC\\mihoyo_sdk_res} using the configured value." << std::endl;
+				std::cout << jsonStr << std::endl;
+				jsonText = il2cpp_string_new(config);
+			}
 		}
 		return CALL_ORIGIN(MoleMole__ConfigUtil_LoadJSONStrConfig, jsonText, useJsonUtility, method);
 	}

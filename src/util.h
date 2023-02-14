@@ -9,9 +9,11 @@ namespace util {
 	VOID LoadConfig();
 	static const char* ClientVersion;
 	static const char* ConfigChannel;
+	static const char* MiHoYoSDKRes;
 	static const char* PublicRSAKey;
 	static const char* PrivateRSAKey;
 	const char* GetConfigChannel();
+	const char* GetMiHoYoSDKRes();
 	const char* GetPublicRSAKey();
 	const char* GetPrivateRSAKey();
 	bool GetEnableValue(const char* a_pKey, bool a_pDefault);
@@ -22,4 +24,5 @@ namespace util {
 	VOID DisableVMProtect();
 	VOID Dump(VOID* ptr, int buflen);
 	VOID HexDump(VOID* ptr, int buflen);
+	std::string ConvertToString(VOID* ptr);
 }
