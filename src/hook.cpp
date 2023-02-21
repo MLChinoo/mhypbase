@@ -68,11 +68,12 @@ namespace hook {
 			}
 		}
 		else if (jsonStr.find("activity_domain") != std::string::npos) {
-			const char* config = util::GetMiHoYoSDKRes();
+			const char* config = util::GetConfigBaseUrl();
 			if (config != nullptr) {
-				std::cout << "[hook] MoleMole__ConfigUtil_LoadJSONStrConfig {StreamingAssets\\MiHoYoSDKRes\\PC\\mihoyo_sdk_res} using the configured value." << std::endl;
-				std::cout << jsonStr << std::endl;
-				json = il2cpp_string_new(config);
+				std::cout << "[hook] UnityEngine__JsonUtility_FromJson {StreamingAssets\\MiHoYoSDKRes\\PC\\mihoyo_sdk_res} using the configured value." << std::endl;
+				std::regex pattern("(https?://[a-z0-9\\.\\-:]+)");
+				jsonStr = std::regex_replace(jsonStr, pattern, config);
+				json = il2cpp_string_new(jsonStr.c_str());
 			}
 		}
 		return CALL_ORIGIN(UnityEngine__JsonUtility_FromJson, json, type, method);
@@ -90,11 +91,12 @@ namespace hook {
 			}
 		}
 		else if (jsonStr.find("activity_domain") != std::string::npos) {
-			const char* config = util::GetMiHoYoSDKRes();
+			const char* config = util::GetConfigBaseUrl();
 			if (config != nullptr) {
 				std::cout << "[hook] MoleMole__ConfigUtil_LoadJSONStrConfig {StreamingAssets\\MiHoYoSDKRes\\PC\\mihoyo_sdk_res} using the configured value." << std::endl;
-				std::cout << jsonStr << std::endl;
-				jsonText = il2cpp_string_new(config);
+				std::regex pattern("(https?://[a-z0-9\\.\\-:]+)");
+				jsonStr = std::regex_replace(jsonStr, pattern, config);
+				jsonText = il2cpp_string_new(jsonStr.c_str());
 			}
 		}
 		return CALL_ORIGIN(MoleMole__ConfigUtil_LoadJSONStrConfig, jsonText, useJsonUtility, method);

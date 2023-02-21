@@ -47,7 +47,7 @@ namespace util
             }
         }
         ConfigChannel = ini.GetValue("Value", "ConfigChannel", nullptr);
-        MiHoYoSDKRes = ini.GetValue("Value", "MiHoYoSDKRes", nullptr);
+        ConfigBaseUrl = ini.GetValue("Value", "ConfigBaseUrl", nullptr);
         PublicRSAKey = ini.GetValue("Value", "PublicRSAKey", nullptr);
         PrivateRSAKey = ini.GetValue("Value", "PrivateRSAKey", nullptr);
     }
@@ -57,9 +57,9 @@ namespace util
         return ConfigChannel;
     }
 
-    const char* GetMiHoYoSDKRes()
+    const char* GetConfigBaseUrl()
     {
-        return MiHoYoSDKRes;
+        return ConfigBaseUrl;
     }
 
     const char* GetPublicRSAKey()
