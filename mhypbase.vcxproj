@@ -96,28 +96,23 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClInclude Include="src\framework.h" />
-    <ClInclude Include="src\dllmain-init.h" />
+    <ClInclude Include="src\config.hpp" />
     <ClInclude Include="src\hook-manager.h" />
-    <ClInclude Include="src\hook.h" />
+    <ClInclude Include="src\hook.hpp" />
     <ClInclude Include="src\il2cpp-api-functions.h" />
     <ClInclude Include="src\il2cpp-appdata.h" />
     <ClInclude Include="src\il2cpp-functions.h" />
-    <ClInclude Include="src\il2cpp-init.h" />
+    <ClInclude Include="src\il2cpp-init.hpp" />
     <ClInclude Include="src\pch.h" />
-    <ClInclude Include="src\util.h" />
+    <ClInclude Include="src\util.hpp" />
     <ClInclude Include="vendor\detours\detours.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="src\dllmain.cpp" />
-    <ClCompile Include="src\dllmain-init.cpp" />
-    <ClCompile Include="src\hook.cpp" />
-    <ClCompile Include="src\il2cpp-init.cpp" />
     <ClCompile Include="src\pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="src\util.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include=".gitignore" />

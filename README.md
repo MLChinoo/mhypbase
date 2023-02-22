@@ -11,8 +11,8 @@ The latest GitHub Action build artifact: [[file]](https://nightly.link/Jx2f/mhyp
 - [x] _Disable log uploads_ to prevent crash log upload.
 - [x] _Custom channel config_ to allow users to connect to a certain dispatch server, and remove watermark.
 - [x] _Custom sdk base url_ to allow users to connect to a certain sdk server without proxy.
-- [x] _Encrypt account password_ with the public key, which can be decrypted by the server private key.
 - [x] _Verify the signature of the dispatched data_ with the public key to avoid the client error 4214.
+- [x] _Encrypt account password_ with the public key, which can be decrypted by the server private key.
 - [x] _Filter out the RCE packets_ to prevent the client from being fully controlled by the server.
 - [ ] ......
 
@@ -26,4 +26,4 @@ The latest GitHub Action build artifact: [[file]](https://nightly.link/Jx2f/mhyp
 
 **Q: Why are those offsets hardcoded?**
 
-**A**: I'm too lazy to write pattern scanning code, and some offsets are not easy to find by pattern scanning.
+**A**: ~~I'm too lazy to write pattern scanning code, and~~ some offsets are not easy to find by pattern scanning.

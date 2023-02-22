@@ -1,20 +1,38 @@
-// dllmain.cpp : Defines the entry point for the DLL application.
 #include "pch.h"
-#include "dllmain-init.h"
+#include "il2cpp-init.hpp"
 
-BOOL APIENTRY DllMain(HMODULE hModule,
-                      DWORD ul_reason_for_call,
-                      LPVOID lpReserved)
+#include "config.hpp"
+#include "hook.hpp"
+#include "util.hpp"
+
+DWORD WINAPI Thread(LPVOID lpParam)
 {
-    switch (ul_reason_for_call)
-    {
-    case DLL_PROCESS_ATTACH:
-        CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)InitDllMain, new HMODULE(hModule), 0, NULL);
-        break;
-    case DLL_THREAD_ATTACH:
-    case DLL_THREAD_DETACH:
-    case DLL_PROCESS_DETACH:
-        break;
-    }
-    return TRUE;
+	config::Load();
+	util::DisableLogReport();
+	util::Log("Disabled log report.");
+
+	while (GetModuleHandle("UserAssembly.dll") == nullptr)
+	{
+		util::Log("UserAssembly.dll isn't loaded, waiting for a sec.");
+		Sleep(1000);
+	}
+	util::Log("Waiting 5 sec for game initialize.");
+	Sleep(5000);
+	util::DisableVMProtect();
+	util::Log("Disabled vm protect.");
+
+	init_il2cpp();
+	util::Log("Loaded il2cpp functions.");
+
+	hook::Load();
+	util::Log("Loaded hooks.");
+	return 0;
+}
+
+BOOL WINAPI DllMain(HINSTANCE hinstDLL, DWORD fdwReason, LPVOID lpvReserved)
+{
+	if (fdwReason == DLL_PROCESS_ATTACH)
+		if (HANDLE hThread = CreateThread(NULL, 0, Thread, NULL, 0, NULL))
+			CloseHandle(hThread);
+	return TRUE;
 }

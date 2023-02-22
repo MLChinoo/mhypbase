@@ -12,26 +12,26 @@ public:
 	static void install(Fn func, Fn handler)
 	{
 		enable(func, handler);
-		holderMap[reinterpret_cast<void *>(handler)] = reinterpret_cast<void *>(func);
+		holderMap[reinterpret_cast<void*>(handler)] = reinterpret_cast<void*>(func);
 	}
 	template <typename Fn>
-	static Fn getOrigin(Fn handler, const char *callerName = nullptr) noexcept
+	static Fn getOrigin(Fn handler, const char* callerName = nullptr) noexcept
 	{
-		if (holderMap.count(reinterpret_cast<void *>(handler)) == 0)
+		if (holderMap.count(reinterpret_cast<void*>(handler)) == 0)
 		{
 			std::cout << "Origin not found for handler: " << callerName << ". Maybe racing bug." << std::endl;
 			return nullptr;
 		}
-		return reinterpret_cast<Fn>(holderMap[reinterpret_cast<void *>(handler)]);
+		return reinterpret_cast<Fn>(holderMap[reinterpret_cast<void*>(handler)]);
 	}
 	template <typename Fn>
 	static void detach(Fn handler) noexcept
 	{
 		disable(handler);
-		holderMap.erase(reinterpret_cast<void *>(handler));
+		holderMap.erase(reinterpret_cast<void*>(handler));
 	}
 	template <typename RType, typename... Params>
-	static RType call(RType (*handler)(Params...), const char *callerName = nullptr, Params... params)
+	static RType call(RType(*handler)(Params...), const char* callerName = nullptr, Params... params)
 	{
 		auto origin = getOrigin(handler, callerName);
 		if (origin != nullptr)
@@ -40,7 +40,7 @@ public:
 	}
 	static void detachAll() noexcept
 	{
-		for (const auto &[key, value] : holderMap)
+		for (const auto& [key, value] : holderMap)
 		{
 			disable(key);
 		}
@@ -48,22 +48,22 @@ public:
 	}
 
 private:
-	inline static std::map<void *, void *> holderMap{};
+	inline static std::map<void*, void*> holderMap{};
 	template <typename Fn>
 	static void disable(Fn handler)
 	{
 		Fn origin = getOrigin(handler);
 		DetourTransactionBegin();
 		DetourUpdateThread(GetCurrentThread());
-		DetourDetach(&(PVOID &)origin, handler);
+		DetourDetach(&(PVOID&)origin, handler);
 		DetourTransactionCommit();
 	}
 	template <typename Fn>
-	static void enable(Fn &func, Fn handler)
+	static void enable(Fn& func, Fn handler)
 	{
 		DetourTransactionBegin();
 		DetourUpdateThread(GetCurrentThread());
-		DetourAttach(&(PVOID &)func, handler);
+		DetourAttach(&(PVOID&)func, handler);
 		DetourTransactionCommit();
 	}
 };
