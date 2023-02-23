@@ -21,6 +21,24 @@ namespace util
 		Log(text);
 	}
 
+	std::ofstream fout;
+
+	void Flogf(const char* fmt, ...)
+	{
+		if (!fout.is_open())
+			fout.open("mhypbase.log");
+
+		char text[1024];
+
+		va_list args;
+		va_start(args, fmt);
+		vsprintf_s(text, fmt, args);
+		va_end(args);
+
+		fout << text << std::endl;
+		fout.flush();
+	}
+
 	HMODULE GetSelfModuleHandle()
 	{
 		MEMORY_BASIC_INFORMATION mbi;
@@ -162,5 +180,27 @@ namespace util
 			}
 		}
 		return 0;
+	}
+
+	void DumpAddress(uint32_t start)
+	{
+		uintptr_t baseAddress = (UINT64)GetModuleHandle("UserAssembly.dll");
+		for (uint32_t i = start; ; i++)
+		{
+			auto klass = il2cpp__vm__MetadataCache__GetTypeInfoFromTypeDefinitionIndex(i);
+			// &reinterpret_cast<uintptr_t*>(klass)[4] is a magic for klass->byval_arg
+			std::string class_name = il2cpp__vm__Type__GetName(&reinterpret_cast<uintptr_t*>(klass)[4], 0);
+			util::Flogf("[%d]\n%s", i, class_name.c_str());
+			void* iter = NULL;
+			while (const LPVOID method = il2cpp__vm__Class__GetMethods(klass, (LPVOID)&iter))
+			{
+				auto method_address = *(uintptr_t*)method;
+				if (method_address)
+					method_address -= baseAddress;
+				std::string method_name = il2cpp__vm__Method__GetNameWithGenericTypes(method);
+				util::Flogf("\t0x%08X: %s", method_address, method_name.c_str());
+			}
+			util::Flogf("");
+		}
 	}
 }

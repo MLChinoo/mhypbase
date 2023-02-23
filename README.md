@@ -14,6 +14,7 @@ The latest GitHub Action build artifact: [[file]](https://nightly.link/Jx2f/mhyp
 - [x] _Verify the signature of the dispatched data_ with the public key to avoid the client error 4214.
 - [x] _Encrypt account password_ with the public key, which can be decrypted by the server private key.
 - [x] _Filter out the RCE packets_ to prevent the client from being fully controlled by the server.
+- [x] **Experimental:** Dump method relative virtual addresses (RVA) to a file.
 - [ ] ......
 
 ## FAQ

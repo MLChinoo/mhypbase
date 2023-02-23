@@ -21,6 +21,11 @@ namespace config
 		return ini.GetBoolValue("Basic", a_pKey, a_nDefault);
 	}
 
+	long GetLongValue(const char* a_pKey, long a_nDefault)
+	{
+		return ini.GetLongValue("Basic", a_pKey, a_nDefault);
+	}
+
 	long GetOffsetValue(const char* a_pKey, long a_nDefault)
 	{
 		return ini.GetLongValue(client_version, a_pKey, a_nDefault);
