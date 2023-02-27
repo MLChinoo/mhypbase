@@ -92,7 +92,7 @@ namespace util
 	}
 
 	// https://github.com/yubie-re/vmp-virtualprotect-bypass/blob/main/src/vp-patch.hpp
-	VOID DisableVMProtect()
+	void DisableVMProtect()
 	{
 		DWORD old_protect = 0;
 		auto ntdll = GetModuleHandleA("ntdll.dll");
@@ -188,13 +188,14 @@ namespace util
 		for (uint32_t i = start; ; i++)
 		{
 			auto klass = il2cpp__vm__MetadataCache__GetTypeInfoFromTypeDefinitionIndex(i);
-			// &reinterpret_cast<uintptr_t*>(klass)[4] is a magic for klass->byval_arg
-			std::string class_name = il2cpp__vm__Type__GetName(&reinterpret_cast<uintptr_t*>(klass)[4], 0);
+			// &reinterpret_cast<uintptr_t*>(klass)[?] is a magic for klass->byval_arg
+			std::string class_name = il2cpp__vm__Type__GetName(&reinterpret_cast<uintptr_t*>(klass)[26], 0);
 			util::Flogf("[%d]\n%s", i, class_name.c_str());
 			void* iter = NULL;
 			while (const LPVOID method = il2cpp__vm__Class__GetMethods(klass, (LPVOID)&iter))
 			{
-				auto method_address = *(uintptr_t*)method;
+				// &reinterpret_cast<uintptr_t*>(method)[?] is a magic for method->methodPointer
+				auto method_address = reinterpret_cast<uintptr_t*>(method)[1];
 				if (method_address)
 					method_address -= baseAddress;
 				std::string method_name = il2cpp__vm__Method__GetNameWithGenericTypes(method);
