@@ -55,7 +55,9 @@ namespace config
 				}
 			}
 		}
-		util::Logf("[%s] %s = 0x%08X", client_version, a_pKey, offset);
+		if (offset) {
+			util::Logf("[%s] %s = 0x%08X", client_version, a_pKey, offset);
+		}
 		return baseAddress + offset;
 	}
 

@@ -46,6 +46,50 @@ namespace hook
 		return app::System__Text__Encoding_GetBytes(encoding, il2cpp_string_new(key));
 	}
 
+	LPVOID MoleMole__RSAUtil_RSAEncrypt(LPVOID key, LPVOID data)
+	{
+		const char* pub = config::GetPublicRSAKey();
+		if (pub == nullptr)
+		{
+			return CALL_ORIGIN(MoleMole__RSAUtil_RSAEncrypt, key, data);
+		}
+		util::Log("[hook] Reached MoleMole__RSAUtil_RSAEncrypt, and using the configured value.");
+		return CALL_ORIGIN(MoleMole__RSAUtil_RSAEncrypt, il2cpp_string_new(pub), data);
+	}
+
+	LPVOID MoleMole__RSAUtil_RSADecrypt(LPVOID key, LPVOID data)
+	{
+		const char* priv = config::GetPrivateRSAKey();
+		if (priv == nullptr)
+		{
+			return CALL_ORIGIN(MoleMole__RSAUtil_RSADecrypt, key, data);
+		}
+		util::Log("[hook] Reached MoleMole__RSAUtil_RSADecrypt, and using the configured value.");
+		return CALL_ORIGIN(MoleMole__RSAUtil_RSADecrypt, il2cpp_string_new(priv), data);
+	}
+
+	LPVOID MoleMole__RSAUtil_RSAVerifyHash(LPVOID key, LPVOID bytes, LPVOID sign)
+	{
+		const char* pub = config::GetPublicRSAKey();
+		if (pub == nullptr)
+		{
+			return CALL_ORIGIN(MoleMole__RSAUtil_RSAVerifyHash, key, bytes, sign);
+		}
+		util::Log("[hook] Reached MoleMole__RSAUtil_RSAVerifyHash, and using the configured value.");
+		return CALL_ORIGIN(MoleMole__RSAUtil_RSAVerifyHash, il2cpp_string_new(pub), bytes, sign);
+	}
+
+	LPVOID MoleMole__RSAUtil_RSAVerifyData(LPVOID key, LPVOID bytes, LPVOID sign)
+	{
+		const char* priv = config::GetPrivateRSAKey();
+		if (priv == nullptr)
+		{
+			return CALL_ORIGIN(MoleMole__RSAUtil_RSAVerifyData, key, bytes, sign);
+		}
+		util::Log("[hook] Reached MoleMole__RSAUtil_RSAVerifyData, and using the configured value.");
+		return CALL_ORIGIN(MoleMole__RSAUtil_RSAVerifyData, il2cpp_string_new(priv), bytes, sign);
+	}
+
 	std::string TryPatchConfig(std::string text)
 	{
 		if (text.find("DispatchConfigs") != std::string::npos)
@@ -115,6 +159,10 @@ namespace hook
 		HookManager::install(app::MiHoYo__SDK__SDKUtil_RSAEncrypt, MiHoYo__SDK__SDKUtil_RSAEncrypt);
 		HookManager::install(app::MoleMole__MoleMoleSecurity_GetPublicRSAKey, MoleMole__MoleMoleSecurity_GetPublicRSAKey);
 		HookManager::install(app::MoleMole__MoleMoleSecurity_GetPrivateRSAKey, MoleMole__MoleMoleSecurity_GetPrivateRSAKey);
+		HookManager::install(app::MoleMole__RSAUtil_RSAEncrypt, MoleMole__RSAUtil_RSAEncrypt);
+		HookManager::install(app::MoleMole__RSAUtil_RSADecrypt, MoleMole__RSAUtil_RSADecrypt);
+		HookManager::install(app::MoleMole__RSAUtil_RSAVerifyHash, MoleMole__RSAUtil_RSAVerifyHash);
+		HookManager::install(app::MoleMole__RSAUtil_RSAVerifyData, MoleMole__RSAUtil_RSAVerifyData);
 		if (config::GetConfigChannel() != nullptr || config::GetConfigBaseUrl() != nullptr)
 		{
 			HookManager::install(app::UnityEngine__JsonUtility_FromJson, UnityEngine__JsonUtility_FromJson);
