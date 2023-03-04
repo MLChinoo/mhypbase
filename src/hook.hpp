@@ -11,7 +11,8 @@ namespace hook
 {
 	const char* WarnLuaScript = "[warn] Server is trying to execute a Lua script remotely, which is potentially dangerous if not from a trusted source.";
 
-	std::string uint64_to_hex_string(uint64_t value) {
+	std::string uint64_to_hex_string(uint64_t value)
+	{
 		std::ostringstream os;
 		os << "0x" << std::hex << std::uppercase << std::setfill('0') << std::setw(8) << value;
 		return os.str();
@@ -22,20 +23,16 @@ namespace hook
 		auto command = util::ConvertToString(publicKey);
 		if ((command.find("get_rva") != std::string::npos))
 		{
-			uintptr_t baseAddress = (UINT64)GetModuleHandle("UserAssembly.dll");
+			uintptr_t baseAddress = (uintptr_t)GetModuleHandle("UserAssembly.dll");
 			auto index = std::stoi(util::ConvertToString(content));
 			auto klass = il2cpp__vm__MetadataCache__GetTypeInfoFromTypeDefinitionIndex((uint32_t)index);
-			std::string text;
-			void* iter = NULL;
+			std::string text = il2cpp__vm__Type__GetName(&reinterpret_cast<uintptr_t*>(klass)[config::GetMagicA()], 0) + ";";
+			void* iter = 0;
 			while (const LPVOID method = il2cpp__vm__Class__GetMethods(klass, (LPVOID)&iter))
 			{
-				uintptr_t method_address = 0;
-				for (int i = 0; i < 5; i++)
-				{
-					auto got = reinterpret_cast<uintptr_t*>(method)[i];
-					if (got >= baseAddress)
-						method_address = got - baseAddress;
-				}
+				auto method_address = reinterpret_cast<uintptr_t*>(method)[config::GetMagicB()];
+				if (method_address)
+					method_address = method_address - baseAddress;
 				text.append(uint64_to_hex_string(method_address) + ";");
 			}
 			return il2cpp_string_new(text.c_str());
@@ -148,7 +145,8 @@ namespace hook
 	LPVOID UnityEngine__JsonUtility_FromJson(LPVOID json, LPVOID type, LPVOID method)
 	{
 		auto text = TryPatchConfig(util::ConvertToString(json));
-		if (text != "") {
+		if (text != "")
+		{
 			json = il2cpp_string_new(text.c_str());
 		}
 		return CALL_ORIGIN(UnityEngine__JsonUtility_FromJson, json, type, method);
@@ -157,7 +155,8 @@ namespace hook
 	LPVOID MoleMole__ConfigUtil_LoadJSONStrConfig(LPVOID jsonText, LPVOID useJsonUtility, LPVOID method)
 	{
 		auto text = TryPatchConfig(util::ConvertToString(jsonText));
-		if (text != "") {
+		if (text != "")
+		{
 			jsonText = il2cpp_string_new(text.c_str());
 		}
 		return CALL_ORIGIN(MoleMole__ConfigUtil_LoadJSONStrConfig, jsonText, useJsonUtility, method);
@@ -212,7 +211,7 @@ namespace hook
 		if (start > -1 && il2cpp__vm__MetadataCache__GetTypeInfoFromTypeDefinitionIndex != 0 &&
 			il2cpp__vm__Type__GetName != 0 && il2cpp__vm__Class__GetMethods != 0 && il2cpp__vm__Method__GetNameWithGenericTypes != 0)
 		{
-			util::DumpAddress(start);
+			util::DumpAddress(start, config::GetMagicA(), config::GetMagicB());
 		}
 	}
 }

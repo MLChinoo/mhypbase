@@ -182,20 +182,20 @@ namespace util
 		return 0;
 	}
 
-	void DumpAddress(uint32_t start)
+	void DumpAddress(uint32_t start, long magic_a, long magic_b)
 	{
-		uintptr_t baseAddress = (UINT64)GetModuleHandle("UserAssembly.dll");
+		uintptr_t baseAddress = (uintptr_t)GetModuleHandle("UserAssembly.dll");
 		for (uint32_t i = start; ; i++)
 		{
 			auto klass = il2cpp__vm__MetadataCache__GetTypeInfoFromTypeDefinitionIndex(i);
 			// &reinterpret_cast<uintptr_t*>(klass)[?] is a magic for klass->byval_arg
-			std::string class_name = il2cpp__vm__Type__GetName(&reinterpret_cast<uintptr_t*>(klass)[26], 0);
+			std::string class_name = il2cpp__vm__Type__GetName(&reinterpret_cast<uintptr_t*>(klass)[magic_a], 0);
 			util::Flogf("[%d]\n%s", i, class_name.c_str());
-			void* iter = NULL;
+			void* iter = 0;
 			while (const LPVOID method = il2cpp__vm__Class__GetMethods(klass, (LPVOID)&iter))
 			{
 				// &reinterpret_cast<uintptr_t*>(method)[?] is a magic for method->methodPointer
-				auto method_address = reinterpret_cast<uintptr_t*>(method)[1];
+				auto method_address = reinterpret_cast<uintptr_t*>(method)[magic_b];
 				if (method_address)
 					method_address -= baseAddress;
 				std::string method_name = il2cpp__vm__Method__GetNameWithGenericTypes(method);
