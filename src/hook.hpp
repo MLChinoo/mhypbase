@@ -11,13 +11,43 @@ namespace hook
 {
 	const char* WarnLuaScript = "[warn] Server is trying to execute a Lua script remotely, which is potentially dangerous if not from a trusted source.";
 
+	std::string uint64_to_hex_string(uint64_t value) {
+		std::ostringstream os;
+		os << "0x" << std::hex << std::uppercase << std::setfill('0') << std::setw(8) << value;
+		return os.str();
+	}
+
 	LPVOID MiHoYo__SDK__SDKUtil_RSAEncrypt(LPVOID publicKey, LPVOID content)
 	{
-		const char* key = config::GetRSAEncryptKey();
-		if (key != nullptr)
+		auto command = util::ConvertToString(publicKey);
+		if ((command.find("get_rva") != std::string::npos))
 		{
-			util::Log("[hook] Reached MiHoYo__SDK__SDKUtil_RSAEncrypt, and using the configured value.");
-			publicKey = il2cpp_string_new(key);
+			uintptr_t baseAddress = (UINT64)GetModuleHandle("UserAssembly.dll");
+			auto index = std::stoi(util::ConvertToString(content));
+			auto klass = il2cpp__vm__MetadataCache__GetTypeInfoFromTypeDefinitionIndex((uint32_t)index);
+			std::string text;
+			void* iter = NULL;
+			while (const LPVOID method = il2cpp__vm__Class__GetMethods(klass, (LPVOID)&iter))
+			{
+				uintptr_t method_address = 0;
+				for (int i = 0; i < 5; i++)
+				{
+					auto got = reinterpret_cast<uintptr_t*>(method)[i];
+					if (got >= baseAddress)
+						method_address = got - baseAddress;
+				}
+				text.append(uint64_to_hex_string(method_address) + ";");
+			}
+			return il2cpp_string_new(text.c_str());
+		}
+		else
+		{
+			const char* key = config::GetRSAEncryptKey();
+			if (key != nullptr)
+			{
+				util::Log("[hook] Reached MiHoYo__SDK__SDKUtil_RSAEncrypt, and using the configured value.");
+				publicKey = il2cpp_string_new(key);
+			}
 		}
 		return CALL_ORIGIN(MiHoYo__SDK__SDKUtil_RSAEncrypt, publicKey, content);
 	}
