@@ -26,7 +26,10 @@ namespace hook
 			uintptr_t baseAddress = (uintptr_t)GetModuleHandle("UserAssembly.dll");
 			auto index = std::stoi(util::ConvertToString(content));
 			auto klass = il2cpp__vm__MetadataCache__GetTypeInfoFromTypeDefinitionIndex((uint32_t)index);
-			std::string text = il2cpp__vm__Type__GetName(&reinterpret_cast<uintptr_t*>(klass)[config::GetMagicA()], 0) + ";";
+			std::string text = il2cpp__vm__Type__GetName(&reinterpret_cast<uintptr_t*>(klass)[config::GetMagicA()], 0);
+			if (text.length() == 0)
+				text.append("<nil>");
+			text.append(";");
 			void* iter = 0;
 			while (const LPVOID method = il2cpp__vm__Class__GetMethods(klass, (LPVOID)&iter))
 			{
@@ -108,7 +111,7 @@ namespace hook
 
 	LPVOID MoleMole__RSAUtil_RSAVerifyData(LPVOID key, LPVOID bytes, LPVOID sign)
 	{
-		const char* priv = config::GetPrivateRSAKey();
+		const char* priv = config::GetPublicRSAKey();
 		if (priv == nullptr)
 		{
 			return CALL_ORIGIN(MoleMole__RSAUtil_RSAVerifyData, key, bytes, sign);
